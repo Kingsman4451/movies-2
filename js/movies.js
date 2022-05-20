@@ -3757,19 +3757,6 @@ var movies = [
     "ytid": "plSyak2D_dM"
   },
   {
-    "Title": "1 Buck",
-    "fulltitle": "1 Buck (2017)",
-    "movie_year": 2017,
-    "Categories": "Drama|Thriller",
-    "summary": "Shifting from one pocket to another, from one man's drama to another, a lowly dollar bill, 'one buck' takes us on an odyssey through the heart of a forgotten town in Louisiana.",
-    "ImageURL": "https://hydramovies.com/wp-content/uploads/2018/04/1-Buck-Movie-Poster.jpg",
-    "imdb_id": "tt4685428",
-    "imdb_rating": 6,
-    "runtime": 90,
-    "language": "English",
-    "ytid": "PyJhVOZVqRQ"
-  },
-  {
     "Title": "Gook",
     "fulltitle": "Gook (2017)",
     "movie_year": 2017,

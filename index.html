@@ -12,25 +12,39 @@
   <main>
     <div class="container">
       <h2 class="h1 text-center mt-4 text-primary">Movies</h2>
-      <form class="form js-form mx-auto" action="https://echo.htmlacademy.ru" method="post">
-          <input class="form-control js-input" type="search" placeholder="Search movies" aria-label="Search movies">
+
+      <form class="form js-form d-flex flex-wrap justify-content-center mx-auto" action="https://echo.htmlacademy.ru" method="post">
+          <input class="form-control js-input-search" type="search" placeholder="Search movies" aria-label="Search movies">
+
+          <input class="form-control js-input-raiting" type="number" placeholder="Enter movie raiting" aria-label="Enter movie raiting">
+
+          <select class="movie-sort js-movie-sort form-select" name="movie_sort"></select>
+
+          <select class="movie-category js-movie-category form-select" name="movie_category"></select>
       </form>
-      <ul class="result-list js-list list-unstyled d-flex flex-wrap justify-content-around p-0 mt-5">
-        
-        
-      </ul>
+
+      <ul class="result-list js-list list-unstyled d-flex flex-wrap justify-content-around p-0 mt-5"></ul>
     </div>
   </main>
+
   <template id="movie-template">
     <li class="card mb-4">
+
         <img class="movie-img" src="https://i3.ytimg.com/vi/4hZi5QaMBFc/maxresdefault.jpg" class="card-img-top" alt="movie img" width="400" height="230">
+
       <div class="card-body">
         <h3 class="card-title h5">Patton Oswalt: Annihilation</h3>
+
         <p class="card-text bg-light p-3">Patton Oswald, despite a personal tragedy, produces his best standup yet. Focusing on the tribulations of the Trump era and life after the loss of a loved one, Patton Oswald continues his journey to contribute joy to the world.</p>
+
         <p class="fw-bold">Categories: <span class="movie-categories fw-normal">Uncategorized</span></p>
+
         <p class="fw-bold">Year: <span class="movie-year fw-normal">2017</span></p>
+
         <p class="fw-bold">Raiting: <span class="movie-raiting fw-normal">7.4</span></p>
+
         <p class="fw-bold">Run time: <span class="movie-runtime fw-normal">66 min</span></p>
+
         <a class="trailer-link btn btn-primary" href="https://www.youtube.com/watch?v=4hZi5QaMBFc"  target="_blank">Watch Trailer</a>
       </div>
     </li>
