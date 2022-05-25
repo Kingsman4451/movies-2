@@ -24,6 +24,7 @@ input, select{
 }
 
 
+
 @media only screen and (max-width: 450px){
   .movie-img {
     width: 100%;

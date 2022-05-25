@@ -12,7 +12,7 @@ let elMovieList = $(".js-list");
 let elMovieTemplate = $("#movie-template").content;
 
 // splice movies
-movies.splice(500)
+movies.splice(1000)
 
 // create arrays
 let movieCategories = [];
@@ -68,7 +68,14 @@ function makeMovieCard(movie) {
   let newMovieLi = elMovieTemplate.cloneNode(true);
 
   $(".movie-img", newMovieLi).src = movie.poster;
-  $(".card-title", newMovieLi).textContent = movie.title;
+  $(".movie-img", newMovieLi).alt = movie.title;
+  let movieTitle = movie.title;
+  if (elSearchInput.value.trim() !== null && elSearchInput.value.trim() !== "") {
+    let searchTitle = new RegExp(elSearchInput.value.trim(), 'i');
+    movieTitle = movieTitle.replace(searchTitle, `<mark class="fw-bold text-white p-0 bg-primary bg-opacity-75">${movieTitle.match(searchTitle)}</mark>`);
+  }
+
+  $(".card-title", newMovieLi).innerHTML = movieTitle;
   $(".card-text", newMovieLi).textContent = movie.summary;
   $(".card-text", newMovieLi).textContent = movie.summary;
   $(".movie-categories", newMovieLi).textContent = movie.categories.join(", ");
@@ -80,94 +87,93 @@ function makeMovieCard(movie) {
   return newMovieLi;
 }
 
-// Sort normalizedMovies array
-let sortMovies = []
-if (elSortSelect.value == movieSort[0]){
-  sortMovies = normalizedMovies.sort((a,b)=> a.title.localeCompare(b.title))
-}
+// Form listener
+elForm.addEventListener("submit", (evt)=>{
+  evt.preventDefault();
+  if(searchMovieText !== ""){
+    renderCards(normalizedMovies)
+  }
+})
 
-// Display movies list function
-let renderMovies = function(movies) {
+// Search input listener
+elSearchInput.addEventListener("input", ()=>{
+  renderCards(normalizedMovies)
+})
+
+// Raiting input listener
+elRaitingInput.addEventListener("input", ()=>{
+  renderCards(normalizedMovies)
+})
+
+// Sort selecter listener
+elSortSelect.addEventListener("change", ()=>{
+  renderCards(normalizedMovies)
+})
+
+// Category selecter listener
+elCategorySelect.addEventListener("change", ()=>{
+  renderCards(normalizedMovies)
+})
+
+// Render movie cards function
+let renderCards = function (movies) {
+  elMovieList.innerHTML = "";
   let newMoviesFragment = document.createDocumentFragment();
-  movies.forEach(movie => {
+
+  let sortedMovies = []
+  let searchMovieText = elSearchInput.value.trim()
+  
+  // For search input
+  if(searchMovieText !== null && searchMovieText !== ""){
+    let searchRegex = new RegExp(searchMovieText, "gi");
+    sortedMovies = movies.filter((movie)=>{
+      return movie.title.match(searchRegex)
+    })
+  }else{
+    sortedMovies = movies;
+  }
+
+  // For catergory selector
+  sortedMovies = sortedMovies.filter(function(movie) {
+    if (elCategorySelect.value !== "All"){
+      return movie.categories.includes(elCategorySelect.value)
+    }else if(elCategorySelect.value == "All") {
+      return sortedMovies 
+    }
+  })
+
+  // For raiting input
+  if(elRaitingInput.value !== "" && !isNaN(parseFloat(elRaitingInput.value))){
+    sortedMovies = sortedMovies.filter((movie)=>{
+      return movie.raiting >= parseFloat(elRaitingInput.value)
+    })
+  }
+
+  // For sort selector
+  if (elSortSelect.value == movieSort[0]){
+    sortedMovies = sortedMovies.sort((a,b)=> a.title.localeCompare(b.title))
+  }
+  if (elSortSelect.value == movieSort[1]){
+    sortedMovies = sortedMovies.sort((a,b)=> b.title.localeCompare(a.title))
+  }
+  if (elSortSelect.value == movieSort[2]){
+    sortedMovies = sortedMovies.sort((a,b)=> b.raiting - a.raiting)
+  }
+  if (elSortSelect.value == movieSort[3]){
+    sortedMovies = sortedMovies.sort((a,b)=> a.raiting - b.raiting)
+  }
+  if (elSortSelect.value == movieSort[4]){
+    sortedMovies = sortedMovies.sort((a,b)=> a.year - b.year)
+  }
+  if (elSortSelect.value == movieSort[5]){
+    sortedMovies = sortedMovies.sort((a,b)=> b.year - a.year)
+  }
+
+  sortedMovies.forEach(movie => {
     newMoviesFragment.append(makeMovieCard(movie))
   });
-
   elMovieList.append(newMoviesFragment)
-
 }
-renderMovies(sortMovies)
+renderCards(normalizedMovies)
 
 
-
-// Search movie function
-elSearchInput.addEventListener("change", (evt) => {
-  evt.preventDefault();
-  elMovieList.innerHTML = "";
-  let searchRegex = new RegExp(elSearchInput.value.trim(), "gi");
-
-  let searchResult = normalizedMovies.filter(function(movie) {
-    if (movie.title.match(searchRegex)){
-      return movie.title.match(searchRegex)
-    } 
-  })
-
-  renderMovies(searchResult)
-})
-
-// Search movies by its raiting function
-elRaitingInput.addEventListener("change", (evt)=>{
-  evt.preventDefault();
-  elMovieList.innerHTML = "";
-
-  let raitingMovies = normalizedMovies.filter(function(movie) {
-    if (+elRaitingInput.value < movie.raiting){
-      return +elRaitingInput.value < movie.raiting
-    } 
-  })
-
-  renderMovies(raitingMovies)
-})
-
-// Search movies by its category function
-elCategorySelect.addEventListener("change", (evt)=>{
-  evt.preventDefault();
-  elMovieList.innerHTML = "";
-
-  let categoryMovies = normalizedMovies.filter(function(movie) {
-    if (movie.categories.includes(elCategorySelect.value)){
-      return movie.categories.includes(elCategorySelect.value)
-    }else if (elCategorySelect.value == "All"){
-      return normalizedMovies
-    }
-  })
-
-  renderMovies(categoryMovies)
-})
-
-
-// Sort movies function
-elSortSelect.addEventListener("change", (evt)=>{
-  evt.preventDefault();
-  elMovieList.innerHTML = "";
-  let sortMovies = [];
-    if (elSortSelect.value == movieSort[0]){
-      sortMovies = normalizedMovies.sort((a,b)=> a.title.localeCompare(b.title))
-    }
-    if (elSortSelect.value == movieSort[1]){
-      sortMovies = normalizedMovies.sort((a,b)=> b.title.localeCompare(a.title))
-    }
-    if (elSortSelect.value == movieSort[2]){
-      sortMovies = normalizedMovies.sort((a,b)=> b.raiting - a.raiting)
-    }
-    if (elSortSelect.value == movieSort[3]){
-      sortMovies = normalizedMovies.sort((a,b)=> a.raiting - b.raiting)
-    }
-    if (elSortSelect.value == movieSort[4]){
-      sortMovies = normalizedMovies.sort((a,b)=> a.year - b.year)
-    }
-    if (elSortSelect.value == movieSort[5]){
-      sortMovies = normalizedMovies.sort((a,b)=> b.year - a.year)
-    }
-  renderMovies(sortMovies)
-})
